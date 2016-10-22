@@ -41,6 +41,14 @@ public class Preferences extends BasicPreference {
 		return settings.getBoolean("is_first_in", false);
 	}
 
+	public void setWelcomePageInfo(String pageInfo) {
+		editor.putString("wel_page_info", pageInfo);
+		save();
+	}
+	public String getWelcomePageInfo() {
+		return settings.getString("auto_update", "");
+	}
+
 
 	private void save(){
 		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {

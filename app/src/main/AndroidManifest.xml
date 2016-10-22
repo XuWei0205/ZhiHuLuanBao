@@ -20,7 +20,10 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activities.NewsListActivity"></activity>
+        <activity
+            android:name=".activities.NewsListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
     </application>
 
 </manifest>

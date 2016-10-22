@@ -7,6 +7,7 @@ public class News {
     private int id;
     private String title;
     private String image;
+    private String imageResource;
 
     public int getId(){
         return id;
@@ -33,6 +34,13 @@ public class News {
 
     public String getImage(){
         return image;
+    }
+
+    public void setImageResource(String resource){
+        this.imageResource = resource;
+    }
+    public String getImageResource(){
+        return imageResource;
     }
 
 }
