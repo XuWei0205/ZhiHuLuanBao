@@ -1,4 +1,4 @@
-package com.hanyu.zhihuluanbao.utils;
+package com.hanyu.zhihuluanbao.commons;
 
 /**
  * Created by Dell on 2016/10/21.

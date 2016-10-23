@@ -6,7 +6,6 @@ import com.hanyu.zhihuluanbao.commons.BasicPreference;
 
 public class Preferences extends BasicPreference {
 	private static Preferences instance;
-
 	public static Preferences getInstance(Context context) {
 		if (instance == null) {
 			synchronized (Preferences.class) {
@@ -20,7 +19,10 @@ public class Preferences extends BasicPreference {
 
 
 	private Preferences(Context context) {
+
 		super(context);
+
+
 	}
 
 	/** 这对方法在2.3以后，调用editor.apply();异步写入preference，效率更高*/
@@ -46,8 +48,9 @@ public class Preferences extends BasicPreference {
 		save();
 	}
 	public String getWelcomePageInfo() {
-		return settings.getString("auto_update", "");
+		return settings.getString("wel_page_info", "");
 	}
+
 
 
 	private void save(){
