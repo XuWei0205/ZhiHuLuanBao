@@ -81,7 +81,8 @@ public class WelcomeActivity extends BasicActivity {
 
 
                Glide.with(getApplicationContext())
-                       .load(response.img).downloadOnly(w_screen,h_screen);
+                       .load(response.img)
+                       .downloadOnly(w_screen,h_screen);
                // Glide 异步下载图片
 
            }

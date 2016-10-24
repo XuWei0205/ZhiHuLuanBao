@@ -23,22 +23,21 @@
         android:background="@drawable/ic_launcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="38dp"
-        android:layout_marginStart="38dp"
+        android:layout_marginRight="26dp"
+        android:layout_marginEnd="26dp"
         android:layout_above="@+id/copyright"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_toLeftOf="@+id/textView"
+        android:layout_toStartOf="@+id/textView" />
     <TextView
-        android:textSize="50dp"
+        android:textSize="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/splash_word"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
         android:id="@+id/textView"
-        android:layout_alignTop="@+id/logo"
-        android:layout_toRightOf="@+id/logo"
-        android:layout_toEndOf="@+id/logo"
-         />
+        android:layout_marginRight="97dp"
+        android:layout_marginEnd="97dp"
+        android:layout_above="@+id/copyright"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
