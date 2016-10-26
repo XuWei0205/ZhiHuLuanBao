@@ -1,7 +1,7 @@
 package com.hanyu.zhihuluanbao.managers;
 
 import com.google.gson.Gson;
-import com.hanyu.zhihuluanbao.models.NewsModel;
+import com.hanyu.zhihuluanbao.models.NewsListModel;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -59,7 +59,7 @@ public class OkHttpClientManager {
 
     private void handleRequest(String url)throws IOException{
         String request = mInstance._getAsString(url);
-        NewsModel newsModel = gson.fromJson(request,NewsModel.class);
+        NewsListModel newsListModel = gson.fromJson(request,NewsListModel.class);
     }
 
 

@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hanyu.zhihuluanbao.R;
-import com.hanyu.zhihuluanbao.models.NewsModel;
 import com.hanyu.zhihuluanbao.models.StoryModel;
 
 import java.util.ArrayList;

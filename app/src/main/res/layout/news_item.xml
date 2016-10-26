@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="180dp">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+    <LinearLayout
+        android:background="@drawable/news_background"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="match_parent" />
+        <TextView
+            android:layout_gravity="center"
+            android:textColor="@color/light_gary2"
+            android:textSize="20dp"
+            android:id="@+id/news_title"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="80dp" />
+        <ImageView
 
-    <TextView
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:id="@+id/news_title"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="50dp" />
+            android:id="@+id/news_image"
+            android:layout_width="70dp"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="match_parent" />
 
-    <ImageView
-        android:id="@+id/news_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

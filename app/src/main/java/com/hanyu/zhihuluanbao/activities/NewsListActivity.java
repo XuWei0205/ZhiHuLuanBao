@@ -1,15 +1,14 @@
 package com.hanyu.zhihuluanbao.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.hanyu.zhihuluanbao.R;
@@ -17,14 +16,11 @@ import com.hanyu.zhihuluanbao.adapters.NewsAdapter;
 import com.hanyu.zhihuluanbao.commons.API;
 import com.hanyu.zhihuluanbao.managers.ActivityManager;
 import com.hanyu.zhihuluanbao.managers.NetManager;
-import com.hanyu.zhihuluanbao.models.NewsModel;
+import com.hanyu.zhihuluanbao.models.NewsListModel;
 import com.hanyu.zhihuluanbao.models.StoryModel;
+import com.hanyu.zhihuluanbao.utils.CLog;
+import com.hanyu.zhihuluanbao.utils.Debug;
 import com.hanyu.zhihuluanbao.utils.Util;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.hanyu.zhihuluanbao.R.drawable.ic_launcher;
 
 /**
  * Created by Dell on 2016/10/21.
@@ -37,6 +33,7 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
     private Button changeMode;
     private ListView listView;
     private NewsAdapter newsAdapter;
+
 
    // private String[] data ={"t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11"};
 
@@ -53,6 +50,17 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
         listView.addHeaderView(LayoutInflater.from(getApplicationContext())
                 .inflate(R.layout.news_list_header_layout, null));
         listView.setAdapter(newsAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(NewsListActivity.this,ReadNewsActivity.class);
+                StoryModel storyModel = newsAdapter.getItem(position-1);
+                intent.putExtra("id", storyModel.id);
+                CLog.i("id--->" + storyModel.id);
+                startActivity(intent);
+
+            }
+        });
 
 
 
@@ -62,31 +70,37 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
     }
 
     private void getData(){
-        NetManager.doHttpGet(getApplicationContext(), null, API.GET_LATEST_NEWS_URL, null,
-                NewsModel.class, new NetManager.ResponseListener<NewsModel>() {
-                    @Override
-                    public void onResponse(NewsModel response) {
-                        if (response != null && response.stories != null) {
-                            newsAdapter.setDatas(response.stories);
-                            newsAdapter.notifyDataSetChanged();
-                        } else {
-                            Util.toastTips(getApplicationContext(),"读取数据错误");
+
+
+            NetManager.doHttpGet(getApplicationContext(), null, API.GET_LATEST_NEWS_URL, null,
+                    NewsListModel.class, new NetManager.ResponseListener<NewsListModel>() {
+                        @Override
+                        public void onResponse(NewsListModel response) {
+                            date.setText(response.date);
+
+                            if (response.stories != null) {
+                                newsAdapter.setDatas(response.stories);
+                                newsAdapter.notifyDataSetChanged();
+                            } else {
+                                Util.toastTips(getApplicationContext(), "读取数据错误");
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Util.toastTips(getApplicationContext(),"网络错误");
-                    }
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Util.toastTips(getApplicationContext(), "网络错误");
+                        }
 
-                    @Override
-                    public void onAsyncResponse(NewsModel response) {
+                        @Override
+                        public void onAsyncResponse(NewsListModel response) {
 
 
-                    }
-                });
+                        }
+                    });
 
-    }
+        }
+
+   
 
 
 

@@ -18,21 +18,6 @@ import java.util.List;
 public abstract class BasicActivity extends AppCompatActivity{
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        if (getLayoutRes() != 0) {
-            setContentView(getLayoutRes());
-        } else {
-            if (getContentView() == null) {
-                throw new RuntimeException("Content View is null!");
-            }
-            setContentView(getContentView());
-        }
-        initView();
-    }
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityManager.addActivity(this);

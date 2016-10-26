@@ -7,6 +7,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.hanyu.zhihuluanbao.commons.GsonRequest;
 import com.hanyu.zhihuluanbao.commons.VolleyManager;
+import com.hanyu.zhihuluanbao.utils.CLog;
 
 import java.util.Map;
 
@@ -26,6 +27,7 @@ public class NetManager {
 
     public static <T> Request<T> doHttpGet(Context context, Map<String, String> headers, String url,
                                            Map<String, String> params,Class clazz,final ResponseListener<T> listener, final int timeout) {
+        CLog.i("url--->"+url);
         GsonRequest<T> request = new GsonRequest<T>(Request.Method.GET, url, clazz, headers, params, new Response.Listener<T>() {
             @Override
             public void onResponse(T response) {
