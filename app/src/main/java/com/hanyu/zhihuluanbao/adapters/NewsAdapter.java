@@ -31,6 +31,7 @@ public class NewsAdapter extends BaseAdapter {
         this.mDatas.addAll(datas);
     }
 
+
     @Override
     public int getCount() {
         return mDatas.size();
