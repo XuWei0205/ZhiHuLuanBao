@@ -3,11 +3,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
-
-        android:src="@drawable/ic_launcher"
+    <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
+        android:id="@+id/header_image"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:scaleType="fitXY"/>
+        android:layout_height="250dp" />
 
 </LinearLayout>

@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 
 import com.hanyu.zhihuluanbao.R;
 import com.hanyu.zhihuluanbao.adapters.NewsAdapter;
+import com.hanyu.zhihuluanbao.adapters.ViewPageAdapter;
 import com.hanyu.zhihuluanbao.commons.API;
 import com.hanyu.zhihuluanbao.managers.ActivityManager;
 import com.hanyu.zhihuluanbao.managers.NetManager;
@@ -26,10 +27,14 @@ import com.hanyu.zhihuluanbao.models.StoryModel;
 import com.hanyu.zhihuluanbao.utils.CLog;
 import com.hanyu.zhihuluanbao.utils.Debug;
 import com.hanyu.zhihuluanbao.utils.Util;
+import com.hanyu.zhihuluanbao.views.BannerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
 /**
  * Created by Dell on 2016/10/21.
@@ -49,12 +54,20 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
     private Calendar now;
     private View footerView,headerView;
     private ArrayList<StoryModel> allDatas = new ArrayList<>();
-
     private SimpleDateFormat dateFormat;
+
+    private List<BannerView> viewList;
+
+    private AutoScrollViewPager viewPager;
+    private ViewPageAdapter pageAdapter;
+
+
+
+
    // private String[] data ={"t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11"};
 
 
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
@@ -73,9 +86,15 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
         footerView = LayoutInflater.from(getApplicationContext())
                 .inflate(R.layout.more_data, null);
         progressBar=(ProgressBar)footerView.findViewById(R.id.load_bar);
-        listView.addFooterView(footerView);
 
+        listView.addFooterView(footerView);
         listView.setAdapter(newsAdapter);
+
+
+        viewPager = (AutoScrollViewPager)headerView.findViewById(R.id.header_image);
+        viewPager.startAutoScroll();
+        viewPager.setInterval(3000);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -114,11 +133,9 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
         });
 
 
-
-
-
-
     }
+
+
 
     private void getData(final String dates){
         String url;
@@ -129,9 +146,28 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
             url = API.BASE_GET_BEFORE_URL + dates;
         }
         NetManager.doHttpGet(getApplicationContext(), null, url, null,
-                BeforeListNewsModel.class, new NetManager.ResponseListener<BeforeListNewsModel>() {
+                NewsListModel.class, new NetManager.ResponseListener<NewsListModel>() {
                     @Override
-                    public void onResponse(BeforeListNewsModel response) {
+                    public void onResponse(NewsListModel response) {
+                        if (response.top_stories != null && response.top_stories.size() > 0) {
+                            // 设置banner
+                            if (viewList == null) {
+                                viewList=new ArrayList<BannerView>(response.top_stories.size());
+                            }
+                            BannerView bannerView;
+                            for (int i = 0; i < response.top_stories.size(); i++) {
+                                bannerView = new BannerView(NewsListActivity.this);
+                                bannerView.setTitle(response.top_stories.get(i).title);
+                                bannerView.setImagePic(response.top_stories.get(i).image);
+                                bannerView.setOnClickListener(bannerClick());
+                                bannerView.setTag(response.top_stories.get(i).id);
+                                viewList.add(bannerView);
+                            }
+                            if (pageAdapter == null) {
+                                pageAdapter = new ViewPageAdapter(viewList);
+                                viewPager.setAdapter(pageAdapter);
+                            }
+                        }
                         newsDate.setText(response.date);
                         if (response.stories != null) {
                             allDatas.addAll(response.stories);
@@ -151,7 +187,7 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
                     }
 
                     @Override
-                    public void onAsyncResponse(BeforeListNewsModel response) {
+                    public void onAsyncResponse(NewsListModel response) {
 
                     }
                 });
@@ -162,7 +198,15 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
     }
 
 
+    private View.OnClickListener bannerClick() {
+        return new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                long id = (long) v.getTag();
 
+            }
+        };
+    }
 
 
     @Override
@@ -176,10 +220,13 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
     }
 
     protected void onResume(){
+        viewPager.startAutoScroll();
+        viewPager.setInterval(3000);
         super.onResume();
     }
 
     protected void onPause(){
+        viewPager.stopAutoScroll();
         super.onPause();
     }
 
