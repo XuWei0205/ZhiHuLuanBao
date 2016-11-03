@@ -46,7 +46,8 @@ public class WelcomeActivity extends BasicActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(WelcomeActivity.this,NewsListActivity.class);
+                Intent intent = new Intent (WelcomeActivity.this,NewsListFraActivity.class);
+                //Intent intent = new Intent(WelcomeActivity.this,NewsListActivity.class);
                 startActivity(intent);
 
 

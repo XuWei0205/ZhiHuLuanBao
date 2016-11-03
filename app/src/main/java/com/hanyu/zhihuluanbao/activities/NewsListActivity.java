@@ -55,7 +55,7 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
     private NewsAdapter newsAdapter;
     private Boolean isLatest = true;
     private int lastVisibleIndex;
-    private ProgressBar progressBar;
+    //private ProgressBar progressBar;
     private String date;
     private Calendar now;
     private View footerView,headerView;
@@ -76,8 +76,6 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         menu.setOnClickListener(this);
         msg.setOnClickListener(this);
         changeMode.setOnClickListener(this);
@@ -88,11 +86,11 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
         CLog.i("date--------> ", "" + date);
         getData(date,false);
         headerView=LayoutInflater.from(getApplicationContext())
-                .inflate(R.layout.news_list_header_layout, null);
+            .inflate(R.layout.news_list_header_layout, null);
         listView.addHeaderView(headerView);
         footerView = LayoutInflater.from(getApplicationContext())
-                .inflate(R.layout.more_data, null);
-        progressBar=(ProgressBar)footerView.findViewById(R.id.load_bar);
+            .inflate(R.layout.more_data, null);
+        //progressBar=(ProgressBar)footerView.findViewById(R.id.load_bar);
 
         listView.addFooterView(footerView);
         listView.setAdapter(newsAdapter);
@@ -103,66 +101,66 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
         viewPager.setInterval(3000);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(NewsListActivity.this, ReadNewsActivity.class);
-                StoryModel storyModel = newsAdapter.getItem(position - 1);
-                intent.putExtra("id", storyModel.id);
-                CLog.i("id--->", "" + storyModel.id);
-                startActivity(intent);
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent intent = new Intent(NewsListActivity.this, ReadNewsActivity.class);
+            StoryModel storyModel = newsAdapter.getItem(position - 1);
+            intent.putExtra("id", storyModel.id);
+            CLog.i("id--->", "" + storyModel.id);
+            startActivity(intent);
 
+        }
+    });
+    listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            lastVisibleIndex = firstVisibleItem + visibleItemCount -1;
+            if (totalItemCount == newsAdapter.getCount()){
+                listView.removeFooterView(footerView);
+                Util.toastTips(getApplicationContext(),"没有更多数据");
             }
-        });
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                lastVisibleIndex = firstVisibleItem + visibleItemCount -1;
-                if (totalItemCount == newsAdapter.getCount()){
-                    listView.removeFooterView(footerView);
-                    Util.toastTips(getApplicationContext(),"没有更多数据");
-                }
 
-            }
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE &&
-                        lastVisibleIndex == newsAdapter.getCount() + 1) {
-                    CLog.i(newsAdapter.getCount() + "----------------" + lastVisibleIndex);
-                    progressBar.setVisibility(View.VISIBLE);
-                    getData(date,false);
-                    CLog.i("BeforeData------->", date);
-                }
-
-
+        }
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE &&
+                    lastVisibleIndex == newsAdapter.getCount() + 1) {
+                CLog.i(newsAdapter.getCount() + "----------------" + lastVisibleIndex);
+                //progressBar.setVisibility(View.VISIBLE);
+                getData(date,false);
+                CLog.i("BeforeData------->", date);
             }
 
 
-        });
+        }
+
+
+    });
 
 
 
-        /** 设置mPtrFrame **/
-        mPtrFrame = (PtrFrameLayout) findViewById(R.id.list_frame);
-        final MaterialHeader header = new MaterialHeader(getApplicationContext());
-        int[] colors = getResources().getIntArray(R.array.google_colors);
-        header.setColorSchemeColors(colors);
-        header.setLayoutParams(new PtrFrameLayout.LayoutParams(-1, -2));
-        header.setPadding(0, LocalDisplay.dp2px(15), 0, LocalDisplay.dp2px(10));
-        header.setPtrFrameLayout(mPtrFrame);
+    /** 设置mPtrFrame **/
+    mPtrFrame = (PtrFrameLayout) findViewById(R.id.list_frame);
+    final MaterialHeader header = new MaterialHeader(getApplicationContext());
+    int[] colors = getResources().getIntArray(R.array.google_colors);
+    header.setColorSchemeColors(colors);
+    header.setLayoutParams(new PtrFrameLayout.LayoutParams(-1, -2));
+    header.setPadding(0, LocalDisplay.dp2px(15), 0, LocalDisplay.dp2px(10));
+    header.setPtrFrameLayout(mPtrFrame);
 
 
 
 
-        mPtrFrame.setLoadingMinTime(1000);
-        mPtrFrame.setDurationToCloseHeader(1500);
-        mPtrFrame.setHeaderView(header);
-        mPtrFrame.addPtrUIHandler(header);
-        mPtrFrame.setResistance(2.0f);//设置提抗力
-        mPtrFrame.setRatioOfHeaderHeightToRefresh(0.2f);//触发刷新时移动的位置比例
-        mPtrFrame.setDurationToClose(200);//回弹延时
-        mPtrFrame.setDurationToCloseHeader(1000);//头部回弹时间
-        mPtrFrame.setPullToRefresh(false);//
-        mPtrFrame.setKeepHeaderWhenRefresh(true);//
+    mPtrFrame.setLoadingMinTime(1000);
+    mPtrFrame.setDurationToCloseHeader(1500);
+    mPtrFrame.setHeaderView(header);
+    mPtrFrame.addPtrUIHandler(header);
+    mPtrFrame.setResistance(2.0f);//设置提抗力
+    mPtrFrame.setRatioOfHeaderHeightToRefresh(0.2f);//触发刷新时移动的位置比例
+    mPtrFrame.setDurationToClose(200);//回弹延时
+    mPtrFrame.setDurationToCloseHeader(1000);//头部回弹时间
+    mPtrFrame.setPullToRefresh(false);//
+    mPtrFrame.setKeepHeaderWhenRefresh(true);//
 //        mPtrFrame.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
@@ -171,26 +169,26 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
 //        }, 100);
 
 
-        mPtrFrame.setPtrHandler(new PtrHandler() {
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
-            }
+    mPtrFrame.setPtrHandler(new PtrHandler() {
+        @Override
+        public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+            return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+        }
 
-            @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                CLog.i("do refresh");
-                isLatest = true;
+        @Override
+        public void onRefreshBegin(PtrFrameLayout frame) {
+            CLog.i("do refresh");
+            isLatest = true;
 
-                getData(date,true);
+            getData(date,true);
 
-            }
-        });
-
-
+        }
+    });
 
 
-    }
+
+
+}
 
 
 
@@ -346,24 +344,24 @@ public class NewsListActivity extends BasicActivity implements View.OnClickListe
 
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.menu:
-                //打开抽屉式菜单
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.menu:
+                    //打开抽屉式菜单
 
-                break;
-            case R.id.msg:
-                //查看消息
+                    break;
+                case R.id.msg:
+                    //查看消息
 
 
-                break;
-            case R.id.changeMode:
-                //改变模式
+                    break;
+                case R.id.changeMode:
+                    //改变模式
 
-                break;
-            default:
-                break;
-        }
+                    break;
+                default:
+                    break;
+            }
 
     }
 }

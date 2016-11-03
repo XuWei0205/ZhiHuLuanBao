@@ -6,12 +6,15 @@
     <color name="copyright">#FFFFFF</color>
     <color name="gray">#333333</color>
     <color name="light_gary">#666666</color>
+    <color name="select_gary">#a7666666</color>
+
     <color name="light_gary2">#cccccc</color>
 
     <color name="red">#ffc93437</color>
     <color name="blue">#3c5eea</color>
     <color name="yellow">#fff7d23e</color>
     <color name="green">#ff37d23e</color>
+    <color name="lightRed">#b7d93649</color>
 
 
 
