@@ -26,6 +26,7 @@ import com.hanyu.zhihuluanbao.utils.CLog;
 import com.hanyu.zhihuluanbao.utils.LocalDisplay;
 import com.hanyu.zhihuluanbao.utils.Util;
 import com.hanyu.zhihuluanbao.views.BannerView;
+import com.viewpagerindicator.TitlePageIndicator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,6 +99,8 @@ public class NewsListFragment extends BasicFragment implements View.OnClickListe
         viewPager = (AutoScrollViewPager)headerView.findViewById(R.id.header_image);
         viewPager.startAutoScroll();
         viewPager.setInterval(3000);
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -223,6 +226,9 @@ public class NewsListFragment extends BasicFragment implements View.OnClickListe
                             if (pageAdapter == null) {
                                 pageAdapter = new ViewPageAdapter(viewList);
                                 viewPager.setAdapter(pageAdapter);
+                               // TitlePageIndicator titleIndicator = (TitlePageIndicator)headerView.findViewById(R.id.titles);
+                                //titleIndicator.setViewPager(viewPager);
+
                             } else {
 
                                 pageAdapter.notifyDataSetChanged();

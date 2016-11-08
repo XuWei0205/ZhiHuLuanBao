@@ -34,12 +34,15 @@ public class WelcomeActivity extends BasicActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //判断最新图片
+
         if(TextUtils.isEmpty(Preferences.getInstance(getApplicationContext())
                 .getWelcomePageInfo())){
            getPageInfo();
         }else {
             showSplashImage();
-
+            getPageInfo();
         }
 
         // 延迟启动下一个页面

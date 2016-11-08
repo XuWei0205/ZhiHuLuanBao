@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.view.Window;
 
 import com.hanyu.zhihuluanbao.R;
@@ -18,7 +19,7 @@ import com.hanyu.zhihuluanbao.managers.ActivityManager;
 /**
  * Created by Dell on 2016/11/3.
  */
-public class NewsListFraActivity extends FragmentActivity {
+public class NewsListFraActivity extends FragmentActivity  {
     private NewsListFragment newsListFragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -21,7 +21,7 @@ import com.hanyu.zhihuluanbao.adapters.ViewPageAdapter;
 import com.hanyu.zhihuluanbao.commons.API;
 import com.hanyu.zhihuluanbao.managers.ActivityManager;
 import com.hanyu.zhihuluanbao.managers.NetManager;
-import com.hanyu.zhihuluanbao.models.BeforeListNewsModel;
+
 import com.hanyu.zhihuluanbao.models.NewsListModel;
 import com.hanyu.zhihuluanbao.models.StoryModel;
 import com.hanyu.zhihuluanbao.utils.CLog;
