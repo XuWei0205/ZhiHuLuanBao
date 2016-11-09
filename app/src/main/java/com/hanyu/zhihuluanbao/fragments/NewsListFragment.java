@@ -42,7 +42,7 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
 /**
  * Created by Dell on 2016/11/3.
  */
-public class NewsListFragment extends BasicFragment implements View.OnClickListener {
+public class NewsListFragment extends BasicFragment  {
 
     private Button menu;
     private TextView newsDate;
@@ -69,16 +69,13 @@ public class NewsListFragment extends BasicFragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.news_lisi_fra_layout,container,false);
-        menu = (Button)view.findViewById(R.id.menu);
-        newsDate= (TextView)view.findViewById(R.id.date);
-        msg = (Button) view.findViewById(R.id.msg);
+
+
         changeMode = (Button)view.findViewById(R.id.changeMode);
         listView = (ListView)view.findViewById(R.id.newsList);
 
 
-        menu.setOnClickListener(this);
-        msg.setOnClickListener(this);
-        changeMode.setOnClickListener(this);
+
         newsAdapter = new NewsAdapter(getActivity().getApplicationContext());
         now = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -234,7 +231,7 @@ public class NewsListFragment extends BasicFragment implements View.OnClickListe
                                 pageAdapter.notifyDataSetChanged();
                             }
                         }
-                        newsDate.setText(response.date);
+                        //newsDate.setText(response.date);
                         if (response.stories != null) {
                             if (isFromRefresh) {
                                 allDatas.clear();
@@ -290,25 +287,7 @@ public class NewsListFragment extends BasicFragment implements View.OnClickListe
     }
 
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.menu:
-                //打开抽屉式菜单
-
-                break;
-            case R.id.msg:
-                //查看消息
 
 
-                break;
-            case R.id.changeMode:
-                //改变模式
 
-                break;
-            default:
-                break;
-        }
-
-    }
 }
