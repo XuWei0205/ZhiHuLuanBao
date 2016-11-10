@@ -9,4 +9,6 @@ public interface API {
      String BASE_GET_NEWS_URL = "http://news-at.zhihu.com/api/4/news/";
      String BASE_GET_BEFORE_URL = "http://news.at.zhihu.com/api/4/news/before/";
      String BASE_GET_THEME_URL ="http://news-at.zhihu.com/api/4/theme/";
+     String GET_THEME_URL = " http://news-at.zhihu.com/api/4/themes";
+
 }

@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <include layout="@layout/tool_bar"></include>
+    <include layout="@layout/tool_bar"
+        android:id="@+id/include">
 
+    </include>
+    <android.support.v4.widget.DrawerLayout
 
-    <FrameLayout
-        android:id="@+id/content_frameLayout"
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include">
 
-</LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/content_frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+        <ListView
+            android:listSelector="@drawable/mylist_view"
+            android:id="@+id/drawer_list"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:choiceMode="singleChoice"
+            android:divider="#33333333"
+            android:dividerHeight="0dp"
+            android:background="@color/black"
+            android:scrollbars="none">
+
+        </ListView>
+
+
+    </android.support.v4.widget.DrawerLayout>
+</RelativeLayout>

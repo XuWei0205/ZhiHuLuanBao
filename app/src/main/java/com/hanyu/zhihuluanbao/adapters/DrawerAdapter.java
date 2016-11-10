@@ -31,8 +31,9 @@ public class DrawerAdapter extends BaseAdapter {
     }
 
     public void setData(ArrayList<OtherModel> mData){
-        this.mData.addAll(mData);
         this.mData.clear();
+        this.mData.addAll(mData);
+
 
     }
 
@@ -57,7 +58,7 @@ public class DrawerAdapter extends BaseAdapter {
         Holder holder;
         if (convertView == null){
             holder = new Holder();
-            convertView = inflater.inflate(R.layout.drawer_layout,null);
+            convertView = inflater.inflate(R.layout.theme_item,null);
             holder.textView = (TextView) convertView.findViewById(R.id.theme_tv);
             convertView.setTag(holder);
         }else{
