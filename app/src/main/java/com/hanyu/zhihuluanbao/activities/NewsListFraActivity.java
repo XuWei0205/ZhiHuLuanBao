@@ -11,10 +11,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
@@ -30,6 +33,7 @@ import com.hanyu.zhihuluanbao.models.ThemeModel;
 import com.hanyu.zhihuluanbao.utils.Util;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 /**
  * Created by Dell on 2016/11/3.
@@ -39,6 +43,11 @@ public class NewsListFraActivity extends ActionBarActivity {
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private DrawerAdapter drawerAdapter;
+    private ActionBarDrawerToggle drawerToggle;
+    private View headerView;
+    private Button home;
+    private int currentFragment ;
+
     private ArrayList<OtherModel> allData = new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,11 +61,28 @@ public class NewsListFraActivity extends ActionBarActivity {
         if(toolbar != null) {
             setSupportActionBar(toolbar);
             toolbar.setNavigationIcon(R.mipmap.menu);
-
-           
         }
-
+        drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        drawerLayout.setDrawerListener(drawerToggle);
         drawerList = (ListView) findViewById(R.id.drawer_list);
+        headerView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.drawer_list_header,null);
+        drawerList.addHeaderView(headerView);
+        home = (Button)headerView.findViewById(R.id.to_home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentFragment == 2) {
+                    newsListFragment = new NewsListFragment();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = manager.beginTransaction();
+                    fragmentTransaction.replace(R.id.content_frameLayout, newsListFragment);
+                    fragmentTransaction.commitAllowingStateLoss();
+                    currentFragment = 1;
+                }
+                drawerLayout.closeDrawer(drawerList);
+            }
+        });
+
         drawerAdapter = new DrawerAdapter(getApplicationContext());
         drawerList.setAdapter(drawerAdapter);
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -71,6 +97,7 @@ public class NewsListFraActivity extends ActionBarActivity {
                 ft.replace(R.id.content_frameLayout,fra,null);
                 //ft.addToBackStack(null);
                 ft.commitAllowingStateLoss();
+                currentFragment = 2;
                 drawerLayout.closeDrawer(drawerList);
 
             }
@@ -85,6 +112,7 @@ public class NewsListFraActivity extends ActionBarActivity {
         ft.add(R.id.content_frameLayout,newsListFragment,null);
         //ft.addToBackStack(null);
         ft.commitAllowingStateLoss();
+        currentFragment = 1;
 
 
     }
