@@ -52,19 +52,20 @@ public class NewsListFraActivity extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.news_list_fra_act_layout);
+        setContentView(R.layout.activity_main);//news_list_fra_act_layout
 
         getData();
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.mDrawer_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         if(toolbar != null) {
             setSupportActionBar(toolbar);
-            toolbar.setNavigationIcon(R.mipmap.menu);
+           // toolbar.setNavigationIcon(R.mipmap.menu);
         }
         drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.setDrawerListener(drawerToggle);
-        drawerList = (ListView) findViewById(R.id.drawer_list);
+        drawerToggle.syncState();
+        drawerList = (ListView) findViewById(R.id.mDrawer_list);
         headerView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.drawer_list_header,null);
         drawerList.addHeaderView(headerView);
         home = (Button)headerView.findViewById(R.id.to_home);
@@ -75,7 +76,7 @@ public class NewsListFraActivity extends ActionBarActivity {
                     newsListFragment = new NewsListFragment();
                     FragmentManager manager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = manager.beginTransaction();
-                    fragmentTransaction.replace(R.id.content_frameLayout, newsListFragment);
+                    fragmentTransaction.replace(R.id.mContent_fra, newsListFragment);
                     fragmentTransaction.commitAllowingStateLoss();
                     currentFragment = 1;
                 }
@@ -94,7 +95,7 @@ public class NewsListFraActivity extends ActionBarActivity {
                 fra.setArguments(arg);
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
-                ft.replace(R.id.content_frameLayout,fra,null);
+                ft.replace(R.id.mContent_fra,fra,null);
                 //ft.addToBackStack(null);
                 ft.commitAllowingStateLoss();
                 currentFragment = 2;
@@ -109,7 +110,7 @@ public class NewsListFraActivity extends ActionBarActivity {
         newsListFragment = new NewsListFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(R.id.content_frameLayout,newsListFragment,null);
+        ft.add(R.id.mContent_fra,newsListFragment,null);
         //ft.addToBackStack(null);
         ft.commitAllowingStateLoss();
         currentFragment = 1;
