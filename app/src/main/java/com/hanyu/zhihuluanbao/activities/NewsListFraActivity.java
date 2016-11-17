@@ -45,8 +45,9 @@ public class NewsListFraActivity extends ActionBarActivity {
     private DrawerAdapter drawerAdapter;
     private ActionBarDrawerToggle drawerToggle;
     private View headerView;
-    private Button home;
+    private Button home,downLoad;
     private int currentFragment ;
+
 
     private ArrayList<OtherModel> allData = new ArrayList<>();
     @Override
@@ -60,7 +61,7 @@ public class NewsListFraActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.mToolbar);
         if(toolbar != null) {
             setSupportActionBar(toolbar);
-           // toolbar.setNavigationIcon(R.mipmap.menu);
+
         }
         drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.setDrawerListener(drawerToggle);
@@ -68,6 +69,8 @@ public class NewsListFraActivity extends ActionBarActivity {
         drawerList = (ListView) findViewById(R.id.mDrawer_list);
         headerView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.drawer_list_header,null);
         drawerList.addHeaderView(headerView);
+
+        /**设置回到主页按键实现回到主页功能**/
         home = (Button)headerView.findViewById(R.id.to_home);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +86,7 @@ public class NewsListFraActivity extends ActionBarActivity {
                 drawerLayout.closeDrawer(drawerList);
             }
         });
-
+        /**设置抽屉菜单的点击功能实现切换主题日报功能**/
         drawerAdapter = new DrawerAdapter(getApplicationContext());
         drawerList.setAdapter(drawerAdapter);
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,7 +99,6 @@ public class NewsListFraActivity extends ActionBarActivity {
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
                 ft.replace(R.id.mContent_fra,fra,null);
-                //ft.addToBackStack(null);
                 ft.commitAllowingStateLoss();
                 currentFragment = 2;
                 drawerLayout.closeDrawer(drawerList);
@@ -104,14 +106,26 @@ public class NewsListFraActivity extends ActionBarActivity {
             }
         });
 
+        /**设置离线下载按键**/
+        downLoad = (Button) headerView.findViewById(R.id.download);
+        downLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                
+
+            }
+        });
 
 
 
+
+
+
+        /**初始化首页fragment**/
         newsListFragment = new NewsListFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.mContent_fra,newsListFragment,null);
-        //ft.addToBackStack(null);
         ft.commitAllowingStateLoss();
         currentFragment = 1;
 

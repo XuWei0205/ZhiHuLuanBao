@@ -6,38 +6,60 @@
     <Button
         android:id="@+id/sign_in"
         android:text="@string/default_name"
-        android:textSize="20sp"
-        android:drawableLeft="@mipmap/menu_avatar"
-        android:drawableStart="@mipmap/menu_avatar"
+        android:textSize="15sp"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:paddingBottom="5dp"
+        android:drawableLeft="@mipmap/user_log"
+        android:drawableStart="@mipmap/user_log"
         android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/collect"
-        android:text="我的收藏"
-        android:textSize="20sp"
-        android:background="@color/black"
-        android:layout_width="120dp"
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/sign_in" />
-    <Button
-        android:id="@+id/download"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:textSize="20sp"
-        android:text="离线下载"
-        android:background="@color/black"
         android:layout_below="@+id/sign_in"
-        android:layout_toRightOf="@+id/collect"
-         />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout">
+        <Button
+            android:id="@+id/collect"
+            android:text="我的收藏"
+            android:textSize="15sp"
+            android:drawableLeft="@mipmap/collect"
+            android:drawableStart="@mipmap/collect"
+            android:background="@color/black"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_below="@+id/sign_in" />
+        <Button
+            android:id="@+id/download"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:textSize="15sp"
+            android:text="离线下载"
+            android:drawableLeft="@mipmap/download"
+            android:drawableStart="@mipmap/download"
+            android:background="@color/black"
+            android:layout_below="@+id/sign_in"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </LinearLayout>
     <Button
         android:id="@+id/to_home"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:text="首页"
+        android:drawableLeft="@mipmap/menu_home"
+        android:drawableStart="@mipmap/menu_home"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/black"
-        android:layout_below="@+id/collect"
+        android:layout_below="@+id/linearLayout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
