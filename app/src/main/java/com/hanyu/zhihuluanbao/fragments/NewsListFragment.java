@@ -14,7 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.google.gson.annotations.Until;
 import com.hanyu.zhihuluanbao.R;
+import com.hanyu.zhihuluanbao.activities.NewsListActivity;
 import com.hanyu.zhihuluanbao.activities.ReadNewsActivity;
 import com.hanyu.zhihuluanbao.adapters.NewsAdapter;
 import com.hanyu.zhihuluanbao.adapters.ViewPageAdapter;
@@ -44,10 +46,8 @@ import in.srain.cube.views.ptr.header.MaterialHeader;
  */
 public class NewsListFragment extends BasicFragment  {
 
-    private Button menu;
-    private TextView newsDate;
-    private Button msg;
-    private Button changeMode;
+
+
     private ListView listView;
     private NewsAdapter newsAdapter;
     private Boolean isLatest = true;
@@ -69,12 +69,7 @@ public class NewsListFragment extends BasicFragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.news_lisi_fra_layout,container,false);
-
-
-        changeMode = (Button)view.findViewById(R.id.changeMode);
         listView = (ListView)view.findViewById(R.id.newsList);
-
-
 
         newsAdapter = new NewsAdapter(getActivity().getApplicationContext());
         now = Calendar.getInstance();
@@ -96,6 +91,7 @@ public class NewsListFragment extends BasicFragment  {
         viewPager = (AutoScrollViewPager)headerView.findViewById(R.id.header_image);
         viewPager.startAutoScroll();
         viewPager.setInterval(3000);
+
 
 
 
@@ -154,20 +150,13 @@ public class NewsListFragment extends BasicFragment  {
         mPtrFrame.setDurationToCloseHeader(1500);
         mPtrFrame.setHeaderView(header);
         mPtrFrame.addPtrUIHandler(header);
-        mPtrFrame.setResistance(2.0f);//设置提抗力
+        mPtrFrame.setResistance(4.0f);//设置提抗力
         mPtrFrame.setRatioOfHeaderHeightToRefresh(0.2f);//触发刷新时移动的位置比例
-        mPtrFrame.setDurationToClose(200);//回弹延时
+        mPtrFrame.setDurationToClose(3000);//回弹延时
         mPtrFrame.setDurationToCloseHeader(1000);//头部回弹时间
         mPtrFrame.setPullToRefresh(false);//
-        mPtrFrame.setKeepHeaderWhenRefresh(true);//
-//        mPtrFrame.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mPtrFrame.autoRefresh();
-//            }
-//        }, 100);
-
-
+        mPtrFrame.setKeepHeaderWhenRefresh(true);
+        mPtrFrame.disableWhenHorizontalMove(true);
         mPtrFrame.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
@@ -281,6 +270,9 @@ public class NewsListFragment extends BasicFragment  {
             @Override
             public void onClick(View v) {
                 long id = (long) v.getTag();
+                Intent intent = new Intent (getActivity(),ReadNewsActivity.class);
+                intent.putExtra("id",id);
+                startActivity(intent);
 
             }
         };

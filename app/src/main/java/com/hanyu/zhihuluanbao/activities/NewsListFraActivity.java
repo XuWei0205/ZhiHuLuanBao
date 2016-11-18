@@ -94,7 +94,7 @@ public class NewsListFraActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NewsPaperFra fra = new NewsPaperFra();
                 Bundle arg = new Bundle();
-                arg.putLong("id", allData.get(position).id);
+                arg.putLong("id", allData.get(position-1).id);
                 fra.setArguments(arg);
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
@@ -111,7 +111,7 @@ public class NewsListFraActivity extends ActionBarActivity {
         downLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
 
             }
         });

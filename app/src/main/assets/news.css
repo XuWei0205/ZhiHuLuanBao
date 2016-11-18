@@ -27,7 +27,7 @@ html {
 }
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, Sans-serif;
-  background: #2d2d2d;
+  background: #212121;
   padding-top: 0;
   margin: 0;
 }
@@ -144,7 +144,7 @@ ol {
   word-break: break-all;
 }
 .headline {
-  border-bottom: 4px solid #f6f6f6;
+  border-bottom: 4px solid #333333;
 }
 .headline-title.onlyheading {
   margin: 20px 0;
@@ -243,7 +243,7 @@ ol {
   width: 125px;
   height: 30px;
   line-height: 30px;
-  background: #222222;
+  background: #333333;
   color: #B8B8B8;
 }
 .question {
@@ -822,7 +822,7 @@ blockquote {
 }
 
 .content-wrap {
-  background: #fff;
+  background: #212121;
 }
 
 hr {

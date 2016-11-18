@@ -54,7 +54,7 @@ public class NewsPaperFra extends BasicFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ReadNewsActivity.class);
-                StoryModel story = adapter.getItem(position);
+                StoryModel story = adapter.getItem(position-1);
                 intent.putExtra("id",story.id);
                 startActivity(intent);
             }
