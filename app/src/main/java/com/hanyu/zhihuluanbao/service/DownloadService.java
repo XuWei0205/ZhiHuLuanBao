@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import com.android.volley.VolleyError;
 import com.hanyu.zhihuluanbao.commons.API;
 import com.hanyu.zhihuluanbao.managers.NetManager;
+import com.hanyu.zhihuluanbao.models.MyDatabase;
 import com.hanyu.zhihuluanbao.models.NewsListModel;
+import com.hanyu.zhihuluanbao.models.NewsModel;
 
 /**
  * Created by Dell on 2016/11/18.
@@ -27,12 +29,65 @@ public class DownloadService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        loadNewsList();
+        loadNews();
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    /**开启网络请求加载NewsList**/
+    private void loadNewsList(){
+        NetManager.doHttpGet(getApplicationContext(), null, API.GET_LATEST_NEWS_URL, null, NewsListModel.class, new NetManager.ResponseListener<NewsListModel>() {
+            @Override
+            public void onResponse(NewsListModel response) {
+
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+
+            @Override
+            public void onAsyncResponse(NewsListModel response) {
+                MyDatabase myDatabase = MyDatabase.getInstance(getApplicationContext());
+                if (response.stories != null && response.stories.size() > 0) {
+                    for (int i = 0; i < response.stories.size(); i++) {
+                        myDatabase.saveStories(response.stories.get(i));
+                    }
+                }
+                if (response.top_stories != null && response.top_stories.size() > 0) {
+                    for (int i = 0; i < response.top_stories.size(); i++) {
+                        myDatabase.saveTopStories(response.top_stories.get(i));
+                    }
+                }
+
+            }
+        });
+    }
+
+    /**开启网络请求加载News**/
+    private void loadNews(){
+        long id = 1;//获取id赋值
+        NetManager.doHttpGet(getApplicationContext(), null, API.BASE_GET_NEWS_URL + id, null, NewsModel.class, new NetManager.ResponseListener<NewsModel>() {
+            @Override
+            public void onResponse(NewsModel response) {
+
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+
+            @Override
+            public void onAsyncResponse(NewsModel response) {
+
+            }
+        });
     }
 }
