@@ -10,9 +10,9 @@ import android.net.NetworkInfo;
 public class NetWorkingUtil {
     public static final int NO_CONNECTION = 0;
     public static final int WIFI = 1;
-    public static final int MoBLE_DATA = 2;
+    public static final int MOBILE_DATA = 2;
 
-    private int getConnection(Context context){
+    public int getConnection(Context context){
         ConnectivityManager manager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo.State state1 = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
@@ -22,7 +22,7 @@ public class NetWorkingUtil {
 
         NetworkInfo.State state2 =manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
         if( state2 == NetworkInfo.State.CONNECTED || state2 == NetworkInfo.State.CONNECTING ){
-            return MoBLE_DATA;
+            return MOBILE_DATA;
 
         }
         return NO_CONNECTION;

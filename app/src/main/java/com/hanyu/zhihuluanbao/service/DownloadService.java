@@ -11,6 +11,10 @@ import com.hanyu.zhihuluanbao.managers.NetManager;
 import com.hanyu.zhihuluanbao.models.MyDatabase;
 import com.hanyu.zhihuluanbao.models.NewsListModel;
 import com.hanyu.zhihuluanbao.models.NewsModel;
+import com.hanyu.zhihuluanbao.models.StoryModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dell on 2016/11/18.
@@ -72,22 +76,31 @@ public class DownloadService extends Service{
 
     /**开启网络请求加载News**/
     private void loadNews(){
-        long id = 1;//获取id赋值
-        NetManager.doHttpGet(getApplicationContext(), null, API.BASE_GET_NEWS_URL + id, null, NewsModel.class, new NetManager.ResponseListener<NewsModel>() {
-            @Override
-            public void onResponse(NewsModel response) {
+        List<StoryModel> storyModelList ;
+        final MyDatabase myDatabase =MyDatabase.getInstance(getApplicationContext());
+        storyModelList = myDatabase.loadStory();
+        for(int i = 0; i < storyModelList.size(); i++){
+            StoryModel storyModel = storyModelList.get(i);
+            Long url= storyModel.id;
+            NetManager.doHttpGet(getApplicationContext(), null, API.BASE_GET_NEWS_URL + url, null, NewsModel.class, new NetManager.ResponseListener<NewsModel>() {
+                @Override
+                public void onResponse(NewsModel response) {
 
-            }
+                }
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                @Override
+                public void onErrorResponse(VolleyError error) {
 
-            }
+                }
 
-            @Override
-            public void onAsyncResponse(NewsModel response) {
+                @Override
+                public void onAsyncResponse(NewsModel response) {
+                    myDatabase.saveNews(response);
+                }
+            });
+        }
 
-            }
-        });
+
     }
+
 }

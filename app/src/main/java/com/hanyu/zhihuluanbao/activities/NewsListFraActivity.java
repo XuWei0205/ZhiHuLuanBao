@@ -3,6 +3,9 @@ package com.hanyu.zhihuluanbao.activities;
 import android.app.Activity;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 
@@ -30,6 +33,8 @@ import com.hanyu.zhihuluanbao.managers.ActivityManager;
 import com.hanyu.zhihuluanbao.managers.NetManager;
 import com.hanyu.zhihuluanbao.models.OtherModel;
 import com.hanyu.zhihuluanbao.models.ThemeModel;
+import com.hanyu.zhihuluanbao.service.DownloadService;
+import com.hanyu.zhihuluanbao.utils.NetWorkingUtil;
 import com.hanyu.zhihuluanbao.utils.Util;
 
 import java.util.ArrayList;
@@ -111,7 +116,33 @@ public class NewsListFraActivity extends ActionBarActivity {
         downLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NetWorkingUtil netWorkingUtil = new NetWorkingUtil();
+                int net = netWorkingUtil.getConnection(getApplicationContext());
+                if(net == 0){
+                    Util.toastTips(getApplicationContext(),"无网络，请检查网络");
+                }else if(net == 1){
+                    Intent startService = new Intent(getApplicationContext(), DownloadService.class);
+                    startService(startService);
+                }else if(net == 2){
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(NewsListFraActivity.this);
+                    alertDialog.setTitle("提示");
+                    alertDialog.setMessage("正在使用手机流量");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setPositiveButton("继续下载", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intentService = new Intent(getApplicationContext(), DownloadService.class);
+                            startService(intentService);
+                        }
+                    });
+                    alertDialog.setNegativeButton("取消",new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+                        }
+                    });
+                    alertDialog.show();
+                }
 
             }
         });
