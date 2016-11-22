@@ -34,6 +34,7 @@ import com.hanyu.zhihuluanbao.managers.NetManager;
 import com.hanyu.zhihuluanbao.models.OtherModel;
 import com.hanyu.zhihuluanbao.models.ThemeModel;
 import com.hanyu.zhihuluanbao.service.DownloadService;
+import com.hanyu.zhihuluanbao.utils.CLog;
 import com.hanyu.zhihuluanbao.utils.NetWorkingUtil;
 import com.hanyu.zhihuluanbao.utils.Util;
 
@@ -121,8 +122,13 @@ public class NewsListFraActivity extends ActionBarActivity {
                 if(net == 0){
                     Util.toastTips(getApplicationContext(),"无网络，请检查网络");
                 }else if(net == 1){
-                    Intent startService = new Intent(getApplicationContext(), DownloadService.class);
-                    startService(startService);
+                    CLog.i(getApplicationContext(),"startService");
+                    try {
+                        Intent startService = new Intent(getApplicationContext(), DownloadService.class);
+                        startService(startService);
+                    }catch (Exception e){
+                        CLog.i("exception","----->" +e.toString());
+                    }
                 }else if(net == 2){
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(NewsListFraActivity.this);
                     alertDialog.setTitle("提示");
@@ -131,8 +137,12 @@ public class NewsListFraActivity extends ActionBarActivity {
                     alertDialog.setPositiveButton("继续下载", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intentService = new Intent(getApplicationContext(), DownloadService.class);
-                            startService(intentService);
+                            try {
+                                Intent intentService = new Intent(getApplicationContext(), DownloadService.class);
+                                startService(intentService);
+                            }catch(Exception e){
+                                CLog.i("exception","------>" + e.toString());
+                            }
                         }
                     });
                     alertDialog.setNegativeButton("取消",new DialogInterface.OnClickListener() {

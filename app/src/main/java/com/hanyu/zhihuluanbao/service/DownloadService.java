@@ -1,17 +1,23 @@
 package com.hanyu.zhihuluanbao.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.android.volley.VolleyError;
+import com.hanyu.zhihuluanbao.R;
+import com.hanyu.zhihuluanbao.activities.NewsListFraActivity;
 import com.hanyu.zhihuluanbao.commons.API;
 import com.hanyu.zhihuluanbao.managers.NetManager;
 import com.hanyu.zhihuluanbao.models.MyDatabase;
 import com.hanyu.zhihuluanbao.models.NewsListModel;
 import com.hanyu.zhihuluanbao.models.NewsModel;
 import com.hanyu.zhihuluanbao.models.StoryModel;
+import com.hanyu.zhihuluanbao.utils.CLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +35,25 @@ public class DownloadService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
+        Intent intent = new Intent(getBaseContext(),NewsListFraActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0, intent,0);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Notification notification = new Notification.Builder(getApplicationContext())
+                .setContentTitle("知乎乱报")
+                .setSmallIcon(R.mipmap.ic_logo)
+                .setContentText("正在下载")
+                .setAutoCancel(true)
+                .setTicker("正在离线下载")
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setContentIntent(pendingIntent)
+                .build();
+        manager.notify(1,notification);
+        CLog.i(getApplicationContext(),"create");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        CLog.i(getApplicationContext(),"startCommand");
         loadNewsList();
         loadNews();
         return super.onStartCommand(intent, flags, startId);

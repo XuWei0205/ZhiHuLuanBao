@@ -11,15 +11,15 @@ import com.hanyu.zhihuluanbao.utils.CLog;
  */
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String STORIES ="create table Stories("
-    + " id integer primary key autoincrement"
+    + " id integer primary key autoincrement,"
             + "data text)";
 
     public static final String NEWS ="create table News("
-            +"id integer primary key autoincrement"
+            +"id integer primary key autoincrement,"
             +"data text)";
 
     public static final String TOPSTORIES = "create table TopStories(" +
-            "id integer primary key autoincrement" +
+            "id integer primary key autoincrement," +
             "data text)";
 
     public MyDatabaseHelper(Context context ,String name,SQLiteDatabase.CursorFactory factory,int version){

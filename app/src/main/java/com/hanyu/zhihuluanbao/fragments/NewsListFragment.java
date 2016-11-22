@@ -1,7 +1,10 @@
 package com.hanyu.zhihuluanbao.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,23 +20,33 @@ import com.android.volley.VolleyError;
 import com.google.gson.annotations.Until;
 import com.hanyu.zhihuluanbao.R;
 import com.hanyu.zhihuluanbao.activities.NewsListActivity;
+import com.hanyu.zhihuluanbao.activities.NewsListFraActivity;
 import com.hanyu.zhihuluanbao.activities.ReadNewsActivity;
 import com.hanyu.zhihuluanbao.adapters.NewsAdapter;
 import com.hanyu.zhihuluanbao.adapters.ViewPageAdapter;
 import com.hanyu.zhihuluanbao.commons.API;
+import com.hanyu.zhihuluanbao.commons.BaseTask;
 import com.hanyu.zhihuluanbao.managers.NetManager;
+import com.hanyu.zhihuluanbao.managers.TaskManager;
+import com.hanyu.zhihuluanbao.models.MyDatabase;
 import com.hanyu.zhihuluanbao.models.NewsListModel;
 import com.hanyu.zhihuluanbao.models.StoryModel;
+import com.hanyu.zhihuluanbao.models.TopStoryModel;
 import com.hanyu.zhihuluanbao.utils.CLog;
 import com.hanyu.zhihuluanbao.utils.LocalDisplay;
+import com.hanyu.zhihuluanbao.utils.NetWorkingUtil;
 import com.hanyu.zhihuluanbao.utils.Util;
 import com.hanyu.zhihuluanbao.views.BannerView;
 import com.viewpagerindicator.TitlePageIndicator;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.FormatFlagsConversionMismatchException;
 import java.util.List;
+
+import java.util.logging.LogRecord;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
@@ -57,6 +70,7 @@ public class NewsListFragment extends BasicFragment  {
     private Calendar now;
     private View footerView,headerView;
     private ArrayList<StoryModel> allDatas = new ArrayList<>();
+
     private SimpleDateFormat dateFormat;
 
     private List<BannerView> viewList;
@@ -64,6 +78,11 @@ public class NewsListFragment extends BasicFragment  {
     private AutoScrollViewPager viewPager;
     private ViewPageAdapter pageAdapter;
     private PtrFrameLayout mPtrFrame;
+    private NetWorkingUtil netWorkingUtil;
+    private MyHandler myHandler = new MyHandler(this);
+
+
+
 
     @Nullable
     @Override
@@ -76,7 +95,17 @@ public class NewsListFragment extends BasicFragment  {
         dateFormat = new SimpleDateFormat("yyyyMMdd");
         date = dateFormat.format(now.getTime());
         CLog.i("date--------> ", "" + date);
-        getData(date,false);
+
+        netWorkingUtil = new NetWorkingUtil();
+        int connection = netWorkingUtil.getConnection(getActivity());
+        if (connection == 1 || connection == 2 ) {
+            getData(date, false);
+        }else if (connection == 0){
+            getLocalData();
+
+        }
+
+
         headerView=LayoutInflater.from(getActivity().getApplicationContext())
                 .inflate(R.layout.news_list_header_layout, null);
         listView.addHeaderView(headerView);
@@ -176,6 +205,8 @@ public class NewsListFragment extends BasicFragment  {
 
     }
 
+
+
     private void getData(final String dates, final boolean isFromRefresh){
         String url;
         if (isLatest ) {
@@ -212,7 +243,7 @@ public class NewsListFragment extends BasicFragment  {
                             if (pageAdapter == null) {
                                 pageAdapter = new ViewPageAdapter(viewList);
                                 viewPager.setAdapter(pageAdapter);
-                               // TitlePageIndicator titleIndicator = (TitlePageIndicator)headerView.findViewById(R.id.titles);
+                                // TitlePageIndicator titleIndicator = (TitlePageIndicator)headerView.findViewById(R.id.titles);
                                 //titleIndicator.setViewPager(viewPager);
 
                             } else {
@@ -264,6 +295,81 @@ public class NewsListFragment extends BasicFragment  {
 
 
     }
+
+    private void getLocalData(){
+       TaskManager.getIns().executeAsyncTask(new BaseTask() {
+           @Override
+           public void executeTask() {
+           }
+
+           @Override
+           public void executeAsyncTask() {
+               List<TopStoryModel> topStoryModelList;
+               topStoryModelList = MyDatabase
+                       .getInstance(getActivity().getApplicationContext()).loadTopStory();
+               Message message = new Message();
+               message.obj = topStoryModelList;
+               myHandler.sendMessage(message);
+               List<StoryModel> storyModelList;
+               storyModelList = MyDatabase
+                       .getInstance(getActivity().getApplication()).loadStory();
+               Message message2 = new Message();
+               message2.obj = storyModelList;
+
+           }
+       });
+
+    }
+
+
+    static class MyHandler extends Handler{
+            WeakReference<NewsListFragment> mFragment;
+            MyHandler(NewsListFragment fragment){
+                mFragment = new WeakReference<NewsListFragment>(fragment);
+            }
+            public void handleMessage(Message msg){
+                NewsListFragment theFragment = mFragment.get();
+                if (theFragment == null ){
+                    return;
+                }
+                List<TopStoryModel> topStoryModelList =(List<TopStoryModel>) msg.obj;
+                if (topStoryModelList != null && topStoryModelList.size() > 0) {
+                    // 设置banner
+                    if (theFragment.viewList == null) {
+                        theFragment.viewList = new ArrayList<BannerView>(topStoryModelList.size());
+                    }
+
+                    BannerView bannerView;
+                    for (int i = 0; i < topStoryModelList.size(); i++) {
+                        bannerView = new BannerView(theFragment.getActivity());
+                        bannerView.setTitle(topStoryModelList.get(i).title);
+                        bannerView.setImagePic(topStoryModelList.get(i).image);
+                        bannerView.setOnClickListener(theFragment.bannerClick());
+                        bannerView.setTag(topStoryModelList.get(i).id);
+                        theFragment.viewList.add(bannerView);
+                    }
+                    if (theFragment.pageAdapter == null) {
+                        theFragment.pageAdapter = new ViewPageAdapter(theFragment.viewList);
+                        theFragment.viewPager.setAdapter(theFragment.pageAdapter);
+                        // TitlePageIndicator titleIndicator = (TitlePageIndicator)headerView.findViewById(R.id.titles);
+                        //titleIndicator.setViewPager(viewPager);
+
+                    } else {
+
+                        theFragment.pageAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+    }
+
+
+
+
+
+
+
+
+
 
     private View.OnClickListener bannerClick() {
         return new View.OnClickListener(){
