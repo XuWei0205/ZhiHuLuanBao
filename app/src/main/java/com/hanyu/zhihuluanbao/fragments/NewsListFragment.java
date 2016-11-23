@@ -307,14 +307,15 @@ public class NewsListFragment extends BasicFragment  {
                List<TopStoryModel> topStoryModelList;
                topStoryModelList = MyDatabase
                        .getInstance(getActivity().getApplicationContext()).loadTopStory();
-               Message message = new Message();
-               message.obj = topStoryModelList;
-               myHandler.sendMessage(message);
                List<StoryModel> storyModelList;
                storyModelList = MyDatabase
                        .getInstance(getActivity().getApplication()).loadStory();
-               Message message2 = new Message();
-               message2.obj = storyModelList;
+               Message message = new Message();
+               ArrayList<List> arrayList = new ArrayList<List>();
+               arrayList.add(topStoryModelList);
+               arrayList.add(storyModelList);
+               message.obj = arrayList;
+               myHandler.sendMessage(message);
 
            }
        });
@@ -332,7 +333,7 @@ public class NewsListFragment extends BasicFragment  {
                 if (theFragment == null ){
                     return;
                 }
-                List<TopStoryModel> topStoryModelList =(List<TopStoryModel>) msg.obj;
+                List<TopStoryModel> topStoryModelList =((ArrayList <List>) msg.obj).get(0);
                 if (topStoryModelList != null && topStoryModelList.size() > 0) {
                     // 设置banner
                     if (theFragment.viewList == null) {
@@ -359,6 +360,17 @@ public class NewsListFragment extends BasicFragment  {
                         theFragment.pageAdapter.notifyDataSetChanged();
                     }
                 }
+
+                List<StoryModel> storyModelList =((ArrayList <List>) msg.obj).get(1);
+                if (storyModelList != null){
+                    theFragment.allDatas.addAll(storyModelList);
+                    theFragment.newsAdapter.setDatas(theFragment.allDatas);
+                    theFragment.newsAdapter.notifyDataSetChanged();
+
+                }
+
+
+
             }
     }
 

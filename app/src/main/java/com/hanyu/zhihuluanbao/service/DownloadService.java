@@ -55,7 +55,7 @@ public class DownloadService extends Service{
     public int onStartCommand(Intent intent, int flags, int startId) {
         CLog.i(getApplicationContext(),"startCommand");
         loadNewsList();
-        loadNews();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -85,6 +85,7 @@ public class DownloadService extends Service{
                         myDatabase.saveStories(response.stories.get(i));
                     }
                 }
+                loadNews();
                 if (response.top_stories != null && response.top_stories.size() > 0) {
                     for (int i = 0; i < response.top_stories.size(); i++) {
                         myDatabase.saveTopStories(response.top_stories.get(i));

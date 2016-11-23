@@ -11,9 +11,11 @@ import com.hanyu.zhihuluanbao.R;
 import com.hanyu.zhihuluanbao.commons.API;
 import com.hanyu.zhihuluanbao.commons.HtmlFile;
 import com.hanyu.zhihuluanbao.managers.NetManager;
+import com.hanyu.zhihuluanbao.models.MyDatabase;
 import com.hanyu.zhihuluanbao.models.NewsModel;
 import com.hanyu.zhihuluanbao.utils.CLog;
 import com.hanyu.zhihuluanbao.utils.Debug;
+import com.hanyu.zhihuluanbao.utils.NetWorkingUtil;
 import com.hanyu.zhihuluanbao.utils.Util;
 
 /**
@@ -28,15 +30,30 @@ public class ReadNewsActivity extends BasicActivity {
         if (getIntent() != null) {
             Intent intent = getIntent();
             long id = intent.getLongExtra("id", 0);
-            if (Debug.DEVELOP_MODE) {
-                CLog.i("id----->" + id);
-            }
+            NetWorkingUtil util = new NetWorkingUtil();
+            int i =  util.getConnection(getApplicationContext());
+            if(i == 1 || i == 2){
             showNews(API.BASE_GET_NEWS_URL + id);
+            }else if(i == 0){
+                showLocalNews(id);
+            }
         } else {
             Util.toastTips(getApplicationContext(),"加载失败");
 
         }
 
+    }
+
+    private void showLocalNews(long id){
+        MyDatabase myDatabase = MyDatabase.getInstance(getApplicationContext());
+
+        NewsModel newsModel = myDatabase.loadNews(id);
+        if (newsModel.body != null){
+            HtmlFile htmlFile = new HtmlFile(newsModel);
+            wv_showNews.loadDataWithBaseURL("x-data://base",htmlFile.html, "text/html", "utf-8", null);
+        }else{
+            Util.toastTips(getApplicationContext(),"读取失败");
+        }
     }
 
     private void showNews(String url){

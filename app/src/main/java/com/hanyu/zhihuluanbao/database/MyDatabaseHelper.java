@@ -12,15 +12,18 @@ import com.hanyu.zhihuluanbao.utils.CLog;
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String STORIES ="create table Stories("
     + " id integer primary key autoincrement,"
+            + "story_id integer UNIQUE,"
             + "data text)";
 
     public static final String NEWS ="create table News("
             +"id integer primary key autoincrement,"
+            +"news_id integer UNIQUE,"
             +"data text)";
 
-    public static final String TOPSTORIES = "create table TopStories(" +
-            "id integer primary key autoincrement," +
-            "data text)";
+    public static final String TOPSTORIES = "create table TopStories("
+            + "id integer primary key autoincrement,"
+            + "topStories_id integer UNIQUE,"
+            + "data text)";
 
     public MyDatabaseHelper(Context context ,String name,SQLiteDatabase.CursorFactory factory,int version){
         super(context,name,factory,version);

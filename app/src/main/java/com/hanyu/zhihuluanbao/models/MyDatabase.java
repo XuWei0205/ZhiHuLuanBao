@@ -45,7 +45,8 @@ public class MyDatabase {
             Gson gson = new Gson ();
             String data= gson.toJson(storyModel);
             values.put("data",data);
-            db.insert("Stories", null, values);
+            values.put("story_id",storyModel.id);
+            db.insertWithOnConflict("Stories","story_id",values,SQLiteDatabase.CONFLICT_REPLACE);
         }
 
     }
@@ -56,7 +57,8 @@ public class MyDatabase {
             Gson gson = new Gson();
             String data = gson.toJson(newsModel);
             values.put("data",data);
-            db.insert("News",null,values);
+            values.put("news_id",newsModel.id);
+            db.insertWithOnConflict("News","news_id",values,SQLiteDatabase.CONFLICT_REPLACE);
         }
     }
 
@@ -66,7 +68,8 @@ public class MyDatabase {
             Gson gson = new Gson();
             String data = gson.toJson(topStoryModel);
             values.put("data",data);
-            db.insert("TopStories",null,values);
+            values.put("topStories_id",topStoryModel.id);
+            db.insertWithOnConflict("TopStories","topStory_id",values,SQLiteDatabase.CONFLICT_REPLACE);
 
         }
     }
@@ -88,21 +91,19 @@ public class MyDatabase {
         return stories;
     }
 
-    public List<NewsModel> loadNews(){
-        List<NewsModel> newsModelList = new ArrayList<>();
-        Cursor cursor = db.query("News",null,null,null,null,null,null);
+    public NewsModel loadNews (long id){
+        NewsModel newsModel = new NewsModel();
+        Cursor cursor = db.query("News",null,"news_id = ?",new String[]{String.valueOf(id)},null,null,null);
 
         if (cursor.moveToFirst()){
-            NewsModel newsModel;
+
             do {
                 Gson gson = new Gson();
                 newsModel = gson.fromJson(cursor.getString(cursor.getColumnIndex("data")),NewsModel.class);
-                newsModelList.add(newsModel);
-
             }while(cursor.moveToNext());
         }
         cursor.close();
-        return newsModelList;
+        return newsModel;
     }
 
     public List<TopStoryModel> loadTopStory(){
