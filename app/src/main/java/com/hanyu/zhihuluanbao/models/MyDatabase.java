@@ -40,37 +40,60 @@ public class MyDatabase {
     }
 
     public void saveStories(StoryModel storyModel){
-        if(storyModel != null) {
-            ContentValues values = new ContentValues();
-            Gson gson = new Gson ();
-            String data= gson.toJson(storyModel);
-            values.put("data",data);
-            values.put("story_id",storyModel.id);
-            db.insertWithOnConflict("Stories","story_id",values,SQLiteDatabase.CONFLICT_REPLACE);
-        }
+        db.beginTransaction();
+        try {
+            if (storyModel != null) {
+                ContentValues values = new ContentValues();
+                Gson gson = new Gson();
+                String data = gson.toJson(storyModel);
+                values.put("data", data);
+                values.put("story_id", storyModel.id);
+                db.insertWithOnConflict("Stories", "story_id", values, SQLiteDatabase.CONFLICT_REPLACE);
+                db.setTransactionSuccessful();
+            }
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
     }
 
     public void saveNews(NewsModel newsModel){
-        if (newsModel != null){
-           ContentValues values = new ContentValues();
-            Gson gson = new Gson();
-            String data = gson.toJson(newsModel);
-            values.put("data",data);
-            values.put("news_id",newsModel.id);
-            db.insertWithOnConflict("News","news_id",values,SQLiteDatabase.CONFLICT_REPLACE);
+        db.beginTransaction();
+        try {
+            if (newsModel != null) {
+                ContentValues values = new ContentValues();
+                Gson gson = new Gson();
+                String data = gson.toJson(newsModel);
+                values.put("data", data);
+                values.put("news_id", newsModel.id);
+                db.insertWithOnConflict("News", "news_id", values, SQLiteDatabase.CONFLICT_REPLACE);
+                db.setTransactionSuccessful();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
         }
     }
 
     public void saveTopStories(TopStoryModel topStoryModel){
-        if (topStoryModel != null) {
-            ContentValues values = new ContentValues();
-            Gson gson = new Gson();
-            String data = gson.toJson(topStoryModel);
-            values.put("data",data);
-            values.put("topStories_id",topStoryModel.id);
-            db.insertWithOnConflict("TopStories","topStory_id",values,SQLiteDatabase.CONFLICT_REPLACE);
-
+        db.setTransactionSuccessful();
+        try {
+            if (topStoryModel != null) {
+                ContentValues values = new ContentValues();
+                Gson gson = new Gson();
+                String data = gson.toJson(topStoryModel);
+                values.put("data", data);
+                values.put("topStories_id", topStoryModel.id);
+                db.insertWithOnConflict("TopStories", "topStory_id", values, SQLiteDatabase.CONFLICT_REPLACE);
+                db.setTransactionSuccessful();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            db.endTransaction();
         }
     }
 

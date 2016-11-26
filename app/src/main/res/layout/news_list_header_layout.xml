@@ -10,10 +10,9 @@
         />
 
     <com.viewpagerindicator.TitlePageIndicator
-        android:id="@+id/titles"
-
+        android:id="@+id/indicator"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_gravity="center_horizontal|bottom" />
 
 

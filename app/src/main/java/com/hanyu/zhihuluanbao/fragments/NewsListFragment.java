@@ -80,6 +80,7 @@ public class NewsListFragment extends BasicFragment  {
     private PtrFrameLayout mPtrFrame;
     private NetWorkingUtil netWorkingUtil;
     private MyHandler myHandler = new MyHandler(this);
+    //private TitlePageIndicator indicator;
 
 
 
@@ -120,8 +121,6 @@ public class NewsListFragment extends BasicFragment  {
         viewPager = (AutoScrollViewPager)headerView.findViewById(R.id.header_image);
         viewPager.startAutoScroll();
         viewPager.setInterval(3000);
-
-
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -243,8 +242,9 @@ public class NewsListFragment extends BasicFragment  {
                             if (pageAdapter == null) {
                                 pageAdapter = new ViewPageAdapter(viewList);
                                 viewPager.setAdapter(pageAdapter);
-                                // TitlePageIndicator titleIndicator = (TitlePageIndicator)headerView.findViewById(R.id.titles);
+                               // TitlePageIndicator titleIndicator = (TitlePageIndicator)headerView.findViewById(R.id.indicator);
                                 //titleIndicator.setViewPager(viewPager);
+
 
                             } else {
 
@@ -352,8 +352,8 @@ public class NewsListFragment extends BasicFragment  {
                     if (theFragment.pageAdapter == null) {
                         theFragment.pageAdapter = new ViewPageAdapter(theFragment.viewList);
                         theFragment.viewPager.setAdapter(theFragment.pageAdapter);
-                        // TitlePageIndicator titleIndicator = (TitlePageIndicator)headerView.findViewById(R.id.titles);
-                        //titleIndicator.setViewPager(viewPager);
+                        TitlePageIndicator titleIndicator = (TitlePageIndicator)theFragment.headerView.findViewById(R.id.indicator);
+                        titleIndicator.setViewPager(theFragment.viewPager);
 
                     } else {
 
