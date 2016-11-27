@@ -18,6 +18,7 @@ import com.hanyu.zhihuluanbao.models.NewsListModel;
 import com.hanyu.zhihuluanbao.models.NewsModel;
 import com.hanyu.zhihuluanbao.models.StoryModel;
 import com.hanyu.zhihuluanbao.utils.CLog;
+import com.hanyu.zhihuluanbao.utils.Time;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,7 @@ public class DownloadService extends Service{
                 MyDatabase myDatabase = MyDatabase.getInstance(getApplicationContext());
                 if (response.stories != null && response.stories.size() > 0) {
                     for (int i = 0; i < response.stories.size(); i++) {
-                        myDatabase.saveStories(response.stories.get(i));
+                        myDatabase.saveStories(response.stories.get(i),response.date);
                     }
                 }
                 loadNews();
@@ -98,9 +99,10 @@ public class DownloadService extends Service{
 
     /**开启网络请求加载News**/
     private void loadNews(){
+        Time time = new Time();
         List<StoryModel> storyModelList ;
         final MyDatabase myDatabase =MyDatabase.getInstance(getApplicationContext());
-        storyModelList = myDatabase.loadStory();
+        storyModelList = myDatabase.loadStory(time.getDate());
         for(int i = 0; i < storyModelList.size(); i++){
             StoryModel storyModel = storyModelList.get(i);
             Long url= storyModel.id;

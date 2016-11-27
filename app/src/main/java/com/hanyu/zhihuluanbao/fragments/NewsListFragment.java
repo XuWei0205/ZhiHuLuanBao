@@ -80,7 +80,7 @@ public class NewsListFragment extends BasicFragment  {
     private PtrFrameLayout mPtrFrame;
     private NetWorkingUtil netWorkingUtil;
     private MyHandler myHandler = new MyHandler(this);
-    //private TitlePageIndicator indicator;
+
 
 
 
@@ -309,7 +309,7 @@ public class NewsListFragment extends BasicFragment  {
                        .getInstance(getActivity().getApplicationContext()).loadTopStory();
                List<StoryModel> storyModelList;
                storyModelList = MyDatabase
-                       .getInstance(getActivity().getApplication()).loadStory();
+                       .getInstance(getActivity().getApplication()).loadStory(date);
                Message message = new Message();
                ArrayList<List> arrayList = new ArrayList<List>();
                arrayList.add(topStoryModelList);

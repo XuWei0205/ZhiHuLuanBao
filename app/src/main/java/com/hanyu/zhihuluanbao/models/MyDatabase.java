@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hanyu.zhihuluanbao.database.MyDatabaseHelper;
+import com.hanyu.zhihuluanbao.utils.CLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class MyDatabase {
         return myDatabase;
     }
 
-    public void saveStories(StoryModel storyModel){
+    public void saveStories(StoryModel storyModel,String date){
         db.beginTransaction();
         try {
             if (storyModel != null) {
@@ -48,6 +49,7 @@ public class MyDatabase {
                 String data = gson.toJson(storyModel);
                 values.put("data", data);
                 values.put("story_id", storyModel.id);
+                values.put("date",date);
                 db.insertWithOnConflict("Stories", "story_id", values, SQLiteDatabase.CONFLICT_REPLACE);
                 db.setTransactionSuccessful();
             }
@@ -97,10 +99,11 @@ public class MyDatabase {
         }
     }
 
-    public List<StoryModel> loadStory() {
+    public List<StoryModel> loadStory(String date) {
+        CLog.i("date ______________"+ date);
         List<StoryModel> stories = new ArrayList<>();
         Cursor cursor =
-                db.query("Stories", null, null, null, null, null, null);
+                db.query("Stories", null, "date = ?",new String[]{String.valueOf(date)}, null, null, null);
         if (cursor.moveToFirst()) {
             StoryModel storyModel ;
             do {

@@ -13,6 +13,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String STORIES ="create table Stories("
     + " id integer primary key autoincrement,"
             + "story_id integer UNIQUE,"
+            + "date integer,"
             + "data text)";
 
     public static final String NEWS ="create table News("
