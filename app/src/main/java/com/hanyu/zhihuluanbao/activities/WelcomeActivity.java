@@ -19,8 +19,11 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.hanyu.zhihuluanbao.R;
 import com.hanyu.zhihuluanbao.commons.API;
+import com.hanyu.zhihuluanbao.commons.BaseTask;
 import com.hanyu.zhihuluanbao.commons.Preferences;
 import com.hanyu.zhihuluanbao.managers.NetManager;
+import com.hanyu.zhihuluanbao.managers.TaskManager;
+import com.hanyu.zhihuluanbao.models.MyDatabase;
 import com.hanyu.zhihuluanbao.models.WelcomeImage;
 import com.hanyu.zhihuluanbao.utils.Util;
 
@@ -35,8 +38,7 @@ public class WelcomeActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
+        deleteDate();
         if(TextUtils.isEmpty(Preferences.getInstance(getApplicationContext())
                 .getWelcomePageInfo())){
            getPageInfo();
@@ -78,15 +80,15 @@ public class WelcomeActivity extends BasicActivity {
        NetManager.doHttpGet(getApplicationContext(), null, API.GET_IMAGE_URL, null, WelcomeImage.class, new NetManager.ResponseListener<WelcomeImage>() {
            @Override
            public void onResponse(WelcomeImage response) {
-               DisplayMetrics dm =getResources().getDisplayMetrics();
+               DisplayMetrics dm = getResources().getDisplayMetrics();
                int w_screen = dm.widthPixels;
                int h = dm.heightPixels;
-               int h_screen =h - Util.getStatusBarHeight(getApplicationContext());
+               int h_screen = h - Util.getStatusBarHeight(getApplicationContext());
 
 
                Glide.with(getApplicationContext())
                        .load(response.img)
-                       .downloadOnly(w_screen,h_screen);
+                       .downloadOnly(w_screen, h_screen);
                // Glide 异步下载图片
 
            }
@@ -107,6 +109,21 @@ public class WelcomeActivity extends BasicActivity {
     }
 
 
+    private void deleteDate(){
+        TaskManager.getIns().executeAsyncTask(new BaseTask() {
+            @Override
+            public void executeTask() {
+
+            }
+
+            @Override
+            public void executeAsyncTask() {
+                MyDatabase myDatabase = MyDatabase.getInstance(getApplicationContext());
+                myDatabase.deleteData();
+
+            }
+        });
+    }
 
 
 

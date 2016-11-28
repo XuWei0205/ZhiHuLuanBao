@@ -16,4 +16,13 @@ public class Time {
         date = dateFormat.format(now.getTime());
         return date;
     }
+    public String getDate(int i){
+        String date;
+        dateFormat = new SimpleDateFormat("yyyyMMdd");
+        now = Calendar.getInstance();
+        now.add(Calendar.DATE,i);
+        date = dateFormat.format(now.getTime());
+        return date;
+
+    }
 }

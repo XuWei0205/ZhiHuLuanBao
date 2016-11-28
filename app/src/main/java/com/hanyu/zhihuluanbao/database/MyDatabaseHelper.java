@@ -19,11 +19,13 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String NEWS ="create table News("
             +"id integer primary key autoincrement,"
             +"news_id integer UNIQUE,"
+            +"date integer,"
             +"data text)";
 
     public static final String TOPSTORIES = "create table TopStories("
             + "id integer primary key autoincrement,"
             + "topStories_id integer UNIQUE,"
+            + "date integer,"
             + "data text)";
 
     public MyDatabaseHelper(Context context ,String name,SQLiteDatabase.CursorFactory factory,int version){
@@ -41,6 +43,10 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch (oldVersion){
+            case 1:
 
+            default:
+        }
     }
 }

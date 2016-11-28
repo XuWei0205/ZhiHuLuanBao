@@ -89,7 +89,7 @@ public class DownloadService extends Service{
                 loadNews();
                 if (response.top_stories != null && response.top_stories.size() > 0) {
                     for (int i = 0; i < response.top_stories.size(); i++) {
-                        myDatabase.saveTopStories(response.top_stories.get(i));
+                        myDatabase.saveTopStories(response.top_stories.get(i),response.date);
                     }
                 }
 
@@ -99,13 +99,15 @@ public class DownloadService extends Service{
 
     /**开启网络请求加载News**/
     private void loadNews(){
-        Time time = new Time();
+        final Time time = new Time();
         List<StoryModel> storyModelList ;
         final MyDatabase myDatabase =MyDatabase.getInstance(getApplicationContext());
         storyModelList = myDatabase.loadStory(time.getDate());
         for(int i = 0; i < storyModelList.size(); i++){
             StoryModel storyModel = storyModelList.get(i);
             Long url= storyModel.id;
+
+
             NetManager.doHttpGet(getApplicationContext(), null, API.BASE_GET_NEWS_URL + url, null, NewsModel.class, new NetManager.ResponseListener<NewsModel>() {
                 @Override
                 public void onResponse(NewsModel response) {
@@ -119,7 +121,7 @@ public class DownloadService extends Service{
 
                 @Override
                 public void onAsyncResponse(NewsModel response) {
-                    myDatabase.saveNews(response);
+                    myDatabase.saveNews(response,time.getDate());
                 }
             });
         }

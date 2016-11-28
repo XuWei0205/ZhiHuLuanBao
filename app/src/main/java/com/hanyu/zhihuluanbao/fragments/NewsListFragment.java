@@ -306,7 +306,7 @@ public class NewsListFragment extends BasicFragment  {
            public void executeAsyncTask() {
                List<TopStoryModel> topStoryModelList;
                topStoryModelList = MyDatabase
-                       .getInstance(getActivity().getApplicationContext()).loadTopStory();
+                       .getInstance(getActivity().getApplicationContext()).loadTopStory(date);
                List<StoryModel> storyModelList;
                storyModelList = MyDatabase
                        .getInstance(getActivity().getApplication()).loadStory(date);
@@ -352,8 +352,8 @@ public class NewsListFragment extends BasicFragment  {
                     if (theFragment.pageAdapter == null) {
                         theFragment.pageAdapter = new ViewPageAdapter(theFragment.viewList);
                         theFragment.viewPager.setAdapter(theFragment.pageAdapter);
-                        TitlePageIndicator titleIndicator = (TitlePageIndicator)theFragment.headerView.findViewById(R.id.indicator);
-                        titleIndicator.setViewPager(theFragment.viewPager);
+                        //TitlePageIndicator titleIndicator = (TitlePageIndicator)theFragment.headerView.findViewById(R.id.indicator);
+                        //titleIndicator.setViewPager(theFragment.viewPager);
 
                     } else {
 

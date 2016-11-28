@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hanyu.zhihuluanbao.database.MyDatabaseHelper;
 import com.hanyu.zhihuluanbao.utils.CLog;
+import com.hanyu.zhihuluanbao.utils.Time;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class MyDatabase {
         }
     }
 
-    public void saveNews(NewsModel newsModel){
+    public void saveNews(NewsModel newsModel,String date){
         db.beginTransaction();
         try {
             if (newsModel != null) {
@@ -69,6 +70,7 @@ public class MyDatabase {
                 Gson gson = new Gson();
                 String data = gson.toJson(newsModel);
                 values.put("data", data);
+                values.put("date",date);
                 values.put("news_id", newsModel.id);
                 db.insertWithOnConflict("News", "news_id", values, SQLiteDatabase.CONFLICT_REPLACE);
                 db.setTransactionSuccessful();
@@ -80,14 +82,15 @@ public class MyDatabase {
         }
     }
 
-    public void saveTopStories(TopStoryModel topStoryModel){
-        db.setTransactionSuccessful();
+    public void saveTopStories(TopStoryModel topStoryModel,String date){
+        db.beginTransaction();
         try {
             if (topStoryModel != null) {
                 ContentValues values = new ContentValues();
                 Gson gson = new Gson();
                 String data = gson.toJson(topStoryModel);
                 values.put("data", data);
+                values.put("date",date);
                 values.put("topStories_id", topStoryModel.id);
                 db.insertWithOnConflict("TopStories", "topStory_id", values, SQLiteDatabase.CONFLICT_REPLACE);
                 db.setTransactionSuccessful();
@@ -100,21 +103,30 @@ public class MyDatabase {
     }
 
     public List<StoryModel> loadStory(String date) {
-        CLog.i("date ______________"+ date);
         List<StoryModel> stories = new ArrayList<>();
-        Cursor cursor =
-                db.query("Stories", null, "date = ?",new String[]{String.valueOf(date)}, null, null, null);
-        if (cursor.moveToFirst()) {
-            StoryModel storyModel ;
-            do {
-                Gson gson = new Gson();
-                storyModel = gson.fromJson(cursor.getString(cursor.getColumnIndex("data")),StoryModel.class);
-                stories.add(storyModel);
+        db.beginTransaction();
+        try {
+            CLog.i("date ______________" + date);
+            Cursor cursor =
+                    db.query("Stories", null, "date = ?", new String[]{String.valueOf(date)}, null, null, null);
+            if (cursor.moveToFirst()) {
+                StoryModel storyModel;
+                do {
+                    Gson gson = new Gson();
+                    storyModel = gson.fromJson(cursor.getString(cursor.getColumnIndex("data")), StoryModel.class);
+                    stories.add(storyModel);
 
-            } while (cursor.moveToNext());
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
         }
-        cursor.close();
         return stories;
+
     }
 
     public NewsModel loadNews (long id){
@@ -132,19 +144,46 @@ public class MyDatabase {
         return newsModel;
     }
 
-    public List<TopStoryModel> loadTopStory(){
+    public List<TopStoryModel> loadTopStory(String date){
         List<TopStoryModel> topStories = new ArrayList<>();
-        Cursor cursor = db.query("TopStories",null,null,null,null,null,null,null);
-        if (cursor.moveToFirst()){
-            TopStoryModel topStoryModel;
-            do {
-                Gson gson = new Gson();
-                topStoryModel = gson.fromJson(cursor.getString(cursor.getColumnIndex("data")),TopStoryModel.class);
-                topStories.add(topStoryModel);
-            }while (cursor.moveToNext());
+        db.beginTransaction();
+        try {
+
+            Cursor cursor = db.query("TopStories", null, "date = ?", new String[]{String.valueOf(date)}, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                TopStoryModel topStoryModel;
+                do {
+                    Gson gson = new Gson();
+                    topStoryModel = gson.fromJson(cursor.getString(cursor.getColumnIndex("data")), TopStoryModel.class);
+                    topStories.add(topStoryModel);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+
+            db.setTransactionSuccessful();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+
         }
-        cursor.close();
         return topStories;
+    }
+
+    public void deleteData(){
+        Time time = new Time();
+        String date =  time.getDate(-2);
+        db.beginTransaction();
+        try {
+            db.delete("Stories", "date < ?", new String[]{date});
+            db.delete("TopStories","date < ?",new String[]{date});
+            db.delete("News","date < ?",new String[]{date});
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
     }
 
 }
