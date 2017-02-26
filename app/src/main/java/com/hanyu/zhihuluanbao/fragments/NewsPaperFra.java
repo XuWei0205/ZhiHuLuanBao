@@ -30,11 +30,11 @@ import java.util.ArrayList;
  */
 public class NewsPaperFra extends BasicFragment {
     private NewsAdapter adapter;
-    private ListView newsList;
+    private ListView lv_news;
 
     private View headerView;
-    private ImageView paperImage;
-    private TextView papertitle;
+    private ImageView imgv_paper;
+    private TextView tv_title;
 
     private ArrayList<StoryModel> datas = new ArrayList<>();
 
@@ -44,13 +44,13 @@ public class NewsPaperFra extends BasicFragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.news_paper_layout,container,false);
-        newsList = (ListView)view.findViewById(R.id.paperList);
+        lv_news = (ListView)view.findViewById(R.id.paperList);
         headerView =LayoutInflater.from(getActivity().getApplicationContext())
                 .inflate(R.layout.paper_header,null);
-        newsList.addHeaderView(headerView);
+        lv_news.addHeaderView(headerView);
         adapter = new NewsAdapter(getActivity().getApplicationContext());
-        newsList.setAdapter(adapter);
-        newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv_news.setAdapter(adapter);
+        lv_news.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ReadNewsActivity.class);
@@ -61,8 +61,8 @@ public class NewsPaperFra extends BasicFragment {
         });
 
 
-        paperImage = (ImageView) headerView.findViewById(R.id.paperHeaderImage);
-        papertitle = (TextView) headerView.findViewById(R.id.paperTitle);
+        imgv_paper = (ImageView) headerView.findViewById(R.id.paperHeaderImage);
+        tv_title = (TextView) headerView.findViewById(R.id.paperTitle);
         long id = getArguments().getLong("id");
         getData(id);
 
@@ -77,8 +77,8 @@ public class NewsPaperFra extends BasicFragment {
 
                 Glide.with(getActivity())
                         .load(response.background)
-                        .into(paperImage);
-                papertitle.setText(response.name);
+                        .into(imgv_paper);
+                tv_title.setText(response.name);
                 if(response.stories != null){
                     datas.addAll(response.stories);
                     adapter.setDatas(datas);

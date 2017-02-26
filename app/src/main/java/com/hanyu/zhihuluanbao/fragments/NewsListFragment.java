@@ -61,7 +61,7 @@ public class NewsListFragment extends BasicFragment  {
 
 
 
-    private ListView listView;
+    private ListView lv_content;
     private NewsAdapter newsAdapter;
     private Boolean isLatest = true;
     private int lastVisibleIndex;
@@ -89,7 +89,7 @@ public class NewsListFragment extends BasicFragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.news_lisi_fra_layout,container,false);
-        listView = (ListView)view.findViewById(R.id.newsList);
+        lv_content = (ListView)view.findViewById(R.id.newsList);
 
         newsAdapter = new NewsAdapter(getActivity().getApplicationContext());
         now = Calendar.getInstance();
@@ -109,13 +109,13 @@ public class NewsListFragment extends BasicFragment  {
 
         headerView=LayoutInflater.from(getActivity().getApplicationContext())
                 .inflate(R.layout.news_list_header_layout, null);
-        listView.addHeaderView(headerView);
+        lv_content.addHeaderView(headerView);
         footerView = LayoutInflater.from(getActivity().getApplicationContext())
                 .inflate(R.layout.more_data, null);
         //progressBar=(ProgressBar)footerView.findViewById(R.id.load_bar);
 
-        listView.addFooterView(footerView);
-        listView.setAdapter(newsAdapter);
+        lv_content.addFooterView(footerView);
+        lv_content.setAdapter(newsAdapter);
 
 
         viewPager = (AutoScrollViewPager)headerView.findViewById(R.id.header_image);
@@ -123,7 +123,7 @@ public class NewsListFragment extends BasicFragment  {
         viewPager.setInterval(3000);
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv_content.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), ReadNewsActivity.class);
@@ -134,12 +134,12 @@ public class NewsListFragment extends BasicFragment  {
 
             }
         });
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        lv_content.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 lastVisibleIndex = firstVisibleItem + visibleItemCount -1;
                 if (totalItemCount == newsAdapter.getCount()){
-                    listView.removeFooterView(footerView);
+                    lv_content.removeFooterView(footerView);
                     Util.toastTips(getActivity().getApplicationContext(),"没有更多数据");
                 }
 
@@ -231,7 +231,8 @@ public class NewsListFragment extends BasicFragment  {
                                 viewList.clear();
                             }
                             BannerView bannerView;
-                            for (int i = 0; i < response.top_stories.size(); i++) {
+                            long size = response.top_stories.size();
+                            for (int i = 0; i < size; i++) {
                                 bannerView = new BannerView(getActivity());
                                 bannerView.setTitle(response.top_stories.get(i).title);
                                 bannerView.setImagePic(response.top_stories.get(i).image);
@@ -341,7 +342,8 @@ public class NewsListFragment extends BasicFragment  {
                     }
 
                     BannerView bannerView;
-                    for (int i = 0; i < topStoryModelList.size(); i++) {
+                    long size = topStoryModelList.size();
+                    for (int i = 0; i < size; i++) {
                         bannerView = new BannerView(theFragment.getActivity());
                         bannerView.setTitle(topStoryModelList.get(i).title);
                         bannerView.setImagePic(topStoryModelList.get(i).image);

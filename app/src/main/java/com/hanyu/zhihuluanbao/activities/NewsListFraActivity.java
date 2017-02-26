@@ -4,6 +4,7 @@ import android.app.Activity;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ import java.util.zip.Inflater;
 public class NewsListFraActivity extends ActionBarActivity {
     private NewsListFragment newsListFragment;
     private DrawerLayout drawerLayout;
-    private ListView drawerList;
+    private ListView lv_drawer;
     private DrawerAdapter drawerAdapter;
     private ActionBarDrawerToggle drawerToggle;
     private View headerView;
@@ -72,9 +73,9 @@ public class NewsListFraActivity extends ActionBarActivity {
         drawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        drawerList = (ListView) findViewById(R.id.mDrawer_list);
+        lv_drawer = (ListView) findViewById(R.id.mDrawer_list);
         headerView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.drawer_list_header,null);
-        drawerList.addHeaderView(headerView);
+        lv_drawer.addHeaderView(headerView);
 
         /**设置回到主页按键实现回到主页功能**/
         home = (Button)headerView.findViewById(R.id.to_home);
@@ -89,13 +90,13 @@ public class NewsListFraActivity extends ActionBarActivity {
                     fragmentTransaction.commitAllowingStateLoss();
                     currentFragment = 1;
                 }
-                drawerLayout.closeDrawer(drawerList);
+                drawerLayout.closeDrawer(lv_drawer);
             }
         });
         /**设置抽屉菜单的点击功能实现切换主题日报功能**/
         drawerAdapter = new DrawerAdapter(getApplicationContext());
-        drawerList.setAdapter(drawerAdapter);
-        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv_drawer.setAdapter(drawerAdapter);
+        lv_drawer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NewsPaperFra fra = new NewsPaperFra();
@@ -107,7 +108,7 @@ public class NewsListFraActivity extends ActionBarActivity {
                 ft.replace(R.id.mContent_fra,fra,null);
                 ft.commitAllowingStateLoss();
                 currentFragment = 2;
-                drawerLayout.closeDrawer(drawerList);
+                drawerLayout.closeDrawer(lv_drawer);
 
             }
         });
@@ -157,11 +158,6 @@ public class NewsListFraActivity extends ActionBarActivity {
             }
         });
 
-
-
-
-
-
         /**初始化首页fragment**/
         newsListFragment = new NewsListFragment();
         FragmentManager fm = getSupportFragmentManager();
@@ -171,6 +167,11 @@ public class NewsListFraActivity extends ActionBarActivity {
         currentFragment = 1;
 
 
+    }
+
+    public static void openActivity(Context context){
+        Intent intent = new Intent(context,NewsListFraActivity.class);
+        context.startActivity(intent);
     }
 
 

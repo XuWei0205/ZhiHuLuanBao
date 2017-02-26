@@ -8,9 +8,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.Window;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,12 +24,12 @@ import com.hanyu.zhihuluanbao.models.MyDatabase;
 import com.hanyu.zhihuluanbao.models.WelcomeImage;
 import com.hanyu.zhihuluanbao.utils.Util;
 
-import java.util.Map;
+
 
 
 public class WelcomeActivity extends BasicActivity {
-    private ImageView imageView;
-    private TextView textView;
+    private ImageView imgv_splash;
+    private TextView tv_copyright;
     private Handler handler = new Handler();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +48,7 @@ public class WelcomeActivity extends BasicActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent (WelcomeActivity.this,NewsListFraActivity.class);
-                //Intent intent = new Intent(WelcomeActivity.this,NewsListActivity.class);
-                startActivity(intent);
-
-
+                NewsListFraActivity.openActivity(WelcomeActivity.this);
             }
         },3000);
     }
@@ -71,8 +64,8 @@ public class WelcomeActivity extends BasicActivity {
         Glide.with(getApplicationContext())
                 .load(welcomeImage.img)
                 .crossFade(2000)
-                .into(imageView);
-        textView.setText(welcomeImage.text);
+                .into(imgv_splash);
+        tv_copyright.setText(welcomeImage.text);
 
 
     }
@@ -108,7 +101,7 @@ public class WelcomeActivity extends BasicActivity {
 
     }
 
-
+/**删除之前的缓存数据**/
     private void deleteDate(){
         TaskManager.getIns().executeAsyncTask(new BaseTask() {
             @Override
@@ -135,8 +128,8 @@ public class WelcomeActivity extends BasicActivity {
 
 
     void initView() {
-        imageView = (ImageView) findViewById(R.id.welcomeImage);
-        textView = (TextView) findViewById(R.id.copyright);
+        imgv_splash = (ImageView) findViewById(R.id.imgv_welcome_image);
+        tv_copyright = (TextView) findViewById(R.id.tv_welcome_copyright);
     }
 
 

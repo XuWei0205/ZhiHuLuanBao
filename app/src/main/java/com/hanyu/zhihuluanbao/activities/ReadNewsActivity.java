@@ -1,9 +1,11 @@
 package com.hanyu.zhihuluanbao.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.android.volley.VolleyError;
@@ -27,6 +29,7 @@ public class ReadNewsActivity extends BasicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getIntent() != null) {
             Intent intent = getIntent();
             long id = intent.getLongExtra("id", 0);
@@ -41,6 +44,12 @@ public class ReadNewsActivity extends BasicActivity {
             Util.toastTips(getApplicationContext(),"加载失败");
 
         }
+
+    }
+    public static void openActivity(Context context ,long id){
+        Intent intent = new Intent (context,ReadNewsActivity.class);
+        intent.putExtra("id",id);
+        context.startActivity(intent);
 
     }
 
@@ -95,7 +104,11 @@ public class ReadNewsActivity extends BasicActivity {
     }
 
     @Override
+
     View getContentView() {
         return null;
     }
+
+
 }
+

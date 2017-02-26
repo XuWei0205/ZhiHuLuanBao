@@ -173,10 +173,11 @@ public class MyDatabase {
     public void deleteData(){
         Time time = new Time();
         String date =  time.getDate(-2);
+        String date2 = time.getDate(-1);
         db.beginTransaction();
         try {
             db.delete("Stories", "date < ?", new String[]{date});
-            db.delete("TopStories","date < ?",new String[]{date});
+            db.delete("TopStories","date < ?",new String[]{date2});
             db.delete("News","date < ?",new String[]{date});
             db.setTransactionSuccessful();
         }catch (Exception e){

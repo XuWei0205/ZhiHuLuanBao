@@ -6,12 +6,12 @@
     >
 
    <ImageView
-       android:id="@+id/welcomeImage"
+       android:id="@+id/imgv_welcome_image"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:scaleType="fitXY"/>
     <TextView
-        android:id="@+id/copyright"
+        android:id="@+id/tv_welcome_copyright"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/copyright"
@@ -19,13 +19,13 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp" />
     <ImageView
-        android:id="@+id/logo"
+        android:id="@+id/imgv_logo"
         android:background="@drawable/ic_launcher"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="26dp"
         android:layout_marginEnd="26dp"
-        android:layout_above="@+id/copyright"
+        android:layout_above="@+id/tv_welcome_copyright"
         android:layout_toLeftOf="@+id/textView"
         android:layout_toStartOf="@+id/textView" />
     <TextView
@@ -37,7 +37,7 @@
         android:id="@+id/textView"
         android:layout_marginRight="97dp"
         android:layout_marginEnd="97dp"
-        android:layout_above="@+id/copyright"
+        android:layout_above="@+id/tv_welcome_copyright"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

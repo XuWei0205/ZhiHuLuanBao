@@ -49,6 +49,7 @@ public class DownloadService extends Service{
                 .setContentIntent(pendingIntent)
                 .build();
         manager.notify(1,notification);
+        manager.cancel(1);
         CLog.i(getApplicationContext(),"create");
     }
 
@@ -82,13 +83,15 @@ public class DownloadService extends Service{
             public void onAsyncResponse(NewsListModel response) {
                 MyDatabase myDatabase = MyDatabase.getInstance(getApplicationContext());
                 if (response.stories != null && response.stories.size() > 0) {
-                    for (int i = 0; i < response.stories.size(); i++) {
+                    long size = response.stories.size();
+                    for (int i = 0; i < size; i++) {
                         myDatabase.saveStories(response.stories.get(i),response.date);
                     }
                 }
                 loadNews();
                 if (response.top_stories != null && response.top_stories.size() > 0) {
-                    for (int i = 0; i < response.top_stories.size(); i++) {
+                    long size = response.top_stories.size();
+                    for (int i = 0; i < size; i++) {
                         myDatabase.saveTopStories(response.top_stories.get(i),response.date);
                     }
                 }
@@ -103,7 +106,8 @@ public class DownloadService extends Service{
         List<StoryModel> storyModelList ;
         final MyDatabase myDatabase =MyDatabase.getInstance(getApplicationContext());
         storyModelList = myDatabase.loadStory(time.getDate());
-        for(int i = 0; i < storyModelList.size(); i++){
+        long size = storyModelList.size();
+        for(int i = 0; i < size; i++){
             StoryModel storyModel = storyModelList.get(i);
             Long url= storyModel.id;
 
